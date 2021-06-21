@@ -30,23 +30,48 @@ extension Deck {
         self.type = type
     }
 
-    public func createDeck(suits:[Suit], values:[Value]) -> [Card] {
-        []
-    }
+    public mutating func createDeck(suits:[Suit], values:[Value]) {
+        for i in 0...suits.count-1 {
+            for k in 0...values.count-1 {
+                    self.cards.append(Card(suit: suits[i], value: values[k], isTrump: false))
+                }
+            }
+        }
 
-    public func shuffle() {
+        public mutating func shuffle() {
+            let temp = cards.shuffled()
+            if temp != cards {
+                cards = temp
+            }
+        }
 
-    }
+        public mutating func defineTrump() {
+            self.trump = cards.last?.suit
+            
+            for i in 0..<cards.count {
+                if cards[i].suit == trump {
+                    cards[i].isTrump = true
+                }
+            }
+        }
 
-    public func defineTrump() {
-
-    }
-
-    public func initialCardsDealForPlayers(players: [Player]) {
-
-    }
+    public mutating func initialCardsDealForPlayers(players: [Player]) {
+            if players.count == 0 || players.count > 6 {
+                return
+            }
+            
+            for i in 0..<players.count {
+                players[i].hand = []
+                for _ in 0..<6 {
+                    if let card = cards.popLast() {
+                        players[i].hand?.append(card)
+                    }
+                }
+            }
+        }
 
     public func setTrumpCards(for suit:Suit) {
+        
 
     }
 }
